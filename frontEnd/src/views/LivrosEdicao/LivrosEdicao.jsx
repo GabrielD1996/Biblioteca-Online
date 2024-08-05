@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import "./index.scss";
-import SubmenuLivros from "../../components/SubmenuLivros/SubmenuLivros";
+import "./index.scss"
 import { useParams } from "react-router-dom";
 import { LivrosService } from "../../api/LivrosService";
 

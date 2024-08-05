@@ -55,7 +55,39 @@ app.post('/livros', async (req, res) => {
         return res.status(500).json({ message: 'Erro interno no servidor' });
     }
 });
+ app.put('/livros/:id', async (req, res) => {
+    const id = parseInt(req.params.id, 10);
 
+    if (isNaN(id)) {
+        return res.status(400).json({ message: 'ID inválido' });
+    }
+
+    if (!req.body.titulo ||!req.body.num_paginas ||!req.body.isbn ||!req.body.editora) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatorios' });
+    }
+
+    try {
+        const livro = await livroModel.findOne({ id: id });
+
+        if (!livro) {
+            return res.status(404).json({ message: 'Livro não encontrado' });
+        }
+
+        const livroAtualizado = await livroModel.findByIdAndUpdate(livro._id, {
+            titulo: req.body.titulo,
+            num_paginas: req.body.num_paginas,
+            isbn: req.body.isbn,
+            editora: req.body.editora
+        }, { new: true });
+
+        if (!livroAtualizado) {
+            return res.status(404).json({ message: 'Livro não encontrado' });
+        }
+        return res.status(200).json({  message: 'Livro atualizado com sucesso', livroAtualizado });   
+    } catch (error) { 
+        console.error('Erro ao atualizar', error);
+        return res.status(500).json({ message: 'Erro interno no servidor' });
+    }})
 
 
 app.listen(PORT, () => {
