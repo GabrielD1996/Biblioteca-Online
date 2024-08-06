@@ -30,7 +30,7 @@ const LivrosCadastro = () => {
     ) {
       await LivrosService.createLivro(body)
         .then((response) => {
-          
+          console.log("chegou ate aqui", body)
           alert(response.data.message);
           navigate(`/livros/${response.data.livro.id}`)
         })

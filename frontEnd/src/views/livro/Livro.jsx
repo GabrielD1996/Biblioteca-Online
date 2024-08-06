@@ -9,8 +9,8 @@ const Livro = () => {
 
   const [livro, setLivro] = useState([]);
 
-  async function getLivro() {
-    const { data } = await LivrosService.getLivro(livroId);
+  async function getLivroSelected() {
+    const { data } = await LivrosService.getLivroSelected(livroId);
     setLivro(data);
   }
   async function deleteLivro(livroId){
@@ -28,7 +28,7 @@ const Livro = () => {
   }
 
   useEffect(() => {
-    getLivro()    
+    getLivroSelected()    
   },[])  
 
   return (

@@ -1,26 +1,38 @@
 import { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
-import "./index.scss"
+import "./index.scss";
+
 import { useParams } from "react-router-dom";
 import { LivrosService } from "../../api/LivrosService";
 
 const LivrosEdicao = () => {
   let { livroId } = useParams();
 
-  const [livro, setLivro] = useState([]);
+  const [livro, setLivro] = useState({
+    id: "",
+    titulo: "",
+    num_paginas: "",
+    isbn: "",
+    editora: ""
+  });
 
   async function getLivro() {
     const { data } = await LivrosService.getLivro(livroId);
     setLivro(data);
   }
-
-  async function editLivro() {
+  useEffect(() => {
+    getLivro();
+  }, [livroId]);
+  console.log("1 passo", livro)
+  async function editLivro(e) {
+    e.preventDefault();
     const body = {
       id: Number(livro.id),
       titulo: livro.titulo,
       num_paginas: Number(livro.num_paginas),
       isbn: livro.isbn,
       editora: livro.editora,
+      
     };
     if (
       livro.id != undefined &&
@@ -34,9 +46,10 @@ const LivrosEdicao = () => {
       livro.editora != undefined &&
       livro.editora != ""
     ) {
-      await LivrosService.updateLivro(Number(livro.id), body)
+      await LivrosService.updateLivro((livro.id), body)
         .then(({ data }) => {
-          alert(data.mensagem);
+          
+          alert(data.message);
         })
         .catch(({ response: { data, status } }) => {
           alert(`${status} - ${data}`);
@@ -44,9 +57,7 @@ const LivrosEdicao = () => {
     }
   }
 
-  useEffect(() => {
-    getLivro();
-  }, []);
+ 
 
   return (
     <>
@@ -54,16 +65,14 @@ const LivrosEdicao = () => {
       <div className="livrosCadastro">
         <h1>Edição de Livros</h1>
         <div>
-          <form id="formulario">
+       
+          <form  id="formulario" onSubmit={editLivro}>
             <div className="form-group">
               <label>Id</label>
               <input
-                type="text"
+                type="number"
                 disabled
                 required
-                onChange={(event) => {
-                  setLivro({ ...livro, id: event.target.value });
-                }}
                 value={livro.id || ""}
               ></input>
             </div>
@@ -81,7 +90,7 @@ const LivrosEdicao = () => {
             <div className="form-group">
               <label>Número de Páginas</label>
               <input
-                type="text"
+                type="number"
                 required
                 onChange={(event) => {
                   setLivro({ ...livro, num_paginas: event.target.value });
@@ -112,15 +121,9 @@ const LivrosEdicao = () => {
               ></input>
             </div>
             <div className="form-group">
-              <button
-                onClick={() => {
-                  editLivro();
-                }}
-              >
-                Atualizar Livro
-              </button>
+              <button type="submit">Atualizar Livro</button>
             </div>
-          </form>
+          </form> 
         </div>
       </div>
     </>
