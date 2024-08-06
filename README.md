@@ -52,7 +52,7 @@ npm install
 ```
 3. Inicie o servidor:
 ```bash
-npm start
+npm run dev
 ```
 ### Front-end
 
@@ -141,7 +141,7 @@ npm run dev
       "isbn": "123-4567890123",
       "editora": "Exemplo Editora"
     },
-    ...
+  
   ]
   ```
 
